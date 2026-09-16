@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: stand_interactivo
+      POSTGRES_USER: stand
+      POSTGRES_PASSWORD: stand
+    ports:
+      - "5432:5432"
+    volumes:
+      - stand_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stand -d stand_interactivo"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://stand:stand@db:5432/stand_interactivo
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  stand_db:
+

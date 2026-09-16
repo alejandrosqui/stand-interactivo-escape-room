@@ -1,5 +1,9 @@
 node_modules/
 dist/
+.venv/
+*.db
+__pycache__/
+*.py[cod]
 .env
 .env.*
 !.env.example
@@ -7,4 +11,3 @@ coverage/
 .idea/
 .vscode/
 *.log
-
