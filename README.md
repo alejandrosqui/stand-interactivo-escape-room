@@ -30,6 +30,47 @@ El administrador podrá configurar la experiencia, los desafíos, las respuestas
 - [User Story Map](docs/USER-STORY-MAP.md)
 - [Reglas de trabajo con GitHub](docs/TRAZABILIDAD-GITHUB.md)
 - [Plan de pruebas](docs/PLAN-DE-PRUEBAS.md)
+- [ADR-001: arquitectura inicial](docs/ADR-001-ARQUITECTURA-INICIAL.md)
+
+## Estado actual
+
+Sprint 1 en desarrollo. El primer corte vertical permite crear una experiencia
+desde el panel, activarla y abrirla como participante mediante código o QR.
+
+## Ejecutar localmente
+
+Requisitos: Docker Desktop con Docker Compose.
+
+```bash
+docker compose up --build
+```
+
+- Aplicación: http://localhost:5173
+- Panel: http://localhost:5173/admin
+- API: http://localhost:8000
+- Documentación interactiva: http://localhost:8000/docs
+
+Para detener los servicios:
+
+```bash
+docker compose down
+```
+
+Los datos de PostgreSQL se conservan en el volumen `stand_db`.
+
+## Validaciones
+
+```bash
+cd backend
+python -m venv .venv
+.venv/Scripts/python -m pip install -r requirements-dev.txt
+$env:DATABASE_URL = "sqlite:///./test_stand.db"
+.venv/Scripts/python -m pytest -q tests
+
+cd ../frontend
+npm install
+npm run build
+```
 
 ## Trazabilidad
 
@@ -41,4 +82,3 @@ El administrador podrá configurar la experiencia, los desafíos, las respuestas
 ## Equipo
 
 - Alejandro Villarroel
-
