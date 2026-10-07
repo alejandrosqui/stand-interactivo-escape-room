@@ -8,6 +8,7 @@ import {
   modificarExperiencia,
 } from "./api";
 import type { Experiencia, ExperienciaDatos } from "./types";
+import { ExperienceConfig } from "./ExperienceConfig";
 
 const vacia: ExperienciaDatos = {
   nombre: "",
@@ -23,6 +24,7 @@ export function AdminPage() {
   const [editando, setEditando] = useState<number | null>(null);
   const [error, setError] = useState("");
   const [guardando, setGuardando] = useState(false);
+  const [configurando, setConfigurando] = useState<Experiencia | null>(null);
 
   const cargar = async () => {
     try {
@@ -79,11 +81,21 @@ export function AdminPage() {
         <div>
           <span className="eyebrow">CONTROL DE MISIÓN</span>
           <h1>Experiencias del stand</h1>
-          <p>Creá, editá y publicá el primer desafío del evento.</p>
+          <p>Creá, configurá y publicá la secuencia del evento.</p>
         </div>
         <a className="ghost-button" href="/">Vista participante</a>
       </header>
 
+      {configurando ? (
+        <ExperienceConfig
+          experiencia={configurando}
+          cerrar={() => setConfigurando(null)}
+          actualizada={(experiencia) => {
+            setConfigurando(experiencia);
+            void cargar();
+          }}
+        />
+      ) : (
       <section className="admin-grid">
         <form className="panel form-panel" onSubmit={guardar}>
           <div className="section-heading">
@@ -222,6 +234,9 @@ export function AdminPage() {
                     >
                       {experiencia.activa ? "Desactivar" : "Activar"}
                     </button>
+                    <button className="ghost-button" onClick={() => setConfigurando(experiencia)}>
+                      Configurar secuencia
+                    </button>
                   </div>
                 </div>
                 <div className="qr-box">
@@ -233,6 +248,7 @@ export function AdminPage() {
           })}
         </section>
       </section>
+      )}
     </main>
   );
 }

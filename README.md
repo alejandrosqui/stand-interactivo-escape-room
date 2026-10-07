@@ -34,8 +34,74 @@ El administrador podrá configurar la experiencia, los desafíos, las respuestas
 
 ## Estado actual
 
-Sprint 1 en desarrollo. El primer corte vertical permite crear una experiencia
-desde el panel, activarla y abrirla como participante mediante código o QR.
+Sprint 2 implementa el ciclo completo del juego sobre el corte vertical del Sprint 1.
+El administrador configura desafíos y elementos físicos; el participante inicia una
+partida, resuelve la secuencia con pistas y tiempo límite y recibe su resultado.
+
+## Sprint 2
+
+### Modelo
+
+- `Desafio` pertenece a una experiencia y define orden, tipo (`texto`, `codigo` o
+  `qr`), consigna, respuesta, pista, puntos y estado.
+- `ElementoFisico` pertenece a una experiencia, tiene un identificador único dentro
+  de ella y puede vincularse a un desafío.
+- `Partida` guarda solo el estado necesario del recorrido: token público, desafío
+  actual, inicio/finalización, estado, puntos y pistas utilizadas. No se almacenan
+  datos personales.
+
+La respuesta correcta solo forma parte de los endpoints administrativos. Los
+contratos públicos de partida no la incluyen y toda validación ocurre en FastAPI.
+
+### Endpoints
+
+- `GET/POST /api/experiencias/{id}/desafios`
+- `PUT /api/experiencias/{id}/desafios/{desafio_id}`
+- `PUT /api/experiencias/{id}/desafios/orden`
+- `GET/POST /api/experiencias/{id}/elementos`
+- `PUT /api/experiencias/{id}/elementos/{elemento_id}`
+- `POST /api/publico/experiencias/{codigo}/partidas`
+- `GET /api/publico/partidas/{token}`
+- `POST /api/publico/partidas/{token}/respuestas`
+- `POST /api/publico/partidas/{token}/pista`
+
+### Recorrido E2E
+
+1. Crear una experiencia desde `/admin` y abrir `Configurar secuencia`.
+2. Agregar y ordenar desafíos; opcionalmente registrar identificadores físicos y
+   vincularlos a desafíos de tipo código o QR.
+3. Activar la experiencia y abrir su enlace o QR de entrada.
+4. Pulsar `Comenzar misión`, responder o ingresar manualmente identificadores,
+   solicitar pistas y completar la secuencia antes del límite.
+5. Ver el estado final, puntaje, desafíos resueltos y pistas utilizadas.
+
+### Base de datos local
+
+En desarrollo local, si no se define `DATABASE_URL`, el backend usa siempre
+`stand_interactivo.db` en la raíz del repositorio. La ruta se calcula desde el código
+y no depende del directorio desde el cual se ejecute uvicorn. El arranque usa
+`Base.metadata.create_all` para agregar tablas faltantes, sin borrar ni recrear la
+base existente.
+
+Para iniciar el backend local sin configurar variables manualmente:
+
+```powershell
+cd backend
+..\.venv\Scripts\python.exe -m uvicorn app.main:app --reload
+```
+
+PostgreSQL continúa disponible indicando una URL explícita:
+
+```powershell
+$env:DATABASE_URL = "postgresql+psycopg://stand:stand@localhost:5432/stand_interactivo"
+uvicorn app.main:app --reload
+```
+
+Los tests configuran `APP_ENV=test` antes de importar la aplicación y crean una base
+SQLite temporal por ejecución. El fixture valida la ruta antes de cada `drop_all` y
+rechaza expresamente `stand_interactivo.db`; no es necesario definir `DATABASE_URL`
+para ejecutar pytest. No se debe eliminar ninguna base existente para aplicar este
+Sprint.
 
 ## Ejecutar localmente
 
@@ -64,7 +130,6 @@ Los datos de PostgreSQL se conservan en el volumen `stand_db`.
 cd backend
 python -m venv .venv
 .venv/Scripts/python -m pip install -r requirements-dev.txt
-$env:DATABASE_URL = "sqlite:///./test_stand.db"
 .venv/Scripts/python -m pytest -q tests
 
 cd ../frontend

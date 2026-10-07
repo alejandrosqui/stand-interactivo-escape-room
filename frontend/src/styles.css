@@ -35,8 +35,9 @@ body::before {
 .landing-shell, .participant-shell, .admin-shell {
   min-height: 100vh;
   position: relative;
-  overflow: hidden;
 }
+.landing-shell { overflow: hidden; }
+.participant-shell, .admin-shell { overflow-x: hidden; }
 
 nav {
   height: 76px;
@@ -147,9 +148,11 @@ input, textarea, select {
 }
 input:focus, textarea:focus, select:focus { border-color: var(--acid); }
 textarea { min-height: 84px; resize: vertical; }
-.form-actions, .card-actions { display: flex; gap: 10px; }
+.form-actions, .card-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 .form-actions { margin-top: 22px; }
 .error-message { color: var(--danger); }
+.success-message { color: var(--acid); }
+.muted { color: var(--muted); }
 .experience-list { min-width: 0; }
 .experience-card { padding: 24px; display: grid; grid-template-columns: 1fr auto; gap: 28px; margin-bottom: 16px; }
 .experience-card h3 { font-size: 24px; margin: 16px 0 8px; }
@@ -176,6 +179,37 @@ textarea { min-height: 84px; resize: vertical; }
 .instruction-panel p { color: var(--muted); line-height: 1.6; margin: 0; }
 .mission-card { margin-top: 18px; padding: 30px; border: 1px solid var(--acid); background: linear-gradient(135deg, rgba(198,255,61,.08), transparent); }
 .mission-card h2 { font-size: clamp(26px, 5vw, 42px); line-height: 1.15; margin: 18px 0 30px; }
+.game-card h2 { margin-bottom: 12px; }
+.challenge-meta { display: flex; justify-content: space-between; gap: 18px; color: var(--muted); }
+.challenge-prompt { color: #cbd0dc; font-size: 18px; line-height: 1.6; }
+.answer-form { margin-top: 26px; }
+.feedback, .hint { margin-top: 20px; padding: 16px; border: 1px solid var(--line); }
+.hint { background: rgba(198,255,61,.06); }
+.hint p { margin-bottom: 0; }
+.result-card { text-align: center; }
+.result-card strong { display: block; color: var(--acid); font: 600 42px "IBM Plex Mono"; }
+.result-card p { color: var(--muted); margin: 18px 0 28px; }
+.config-band { border-top: 1px solid var(--line); padding: 42px max(24px, calc((100% - 1280px) / 2)) 80px; }
+.config-header { display: flex; justify-content: space-between; align-items: center; gap: 24px; margin-bottom: 26px; }
+.config-header h2 { font-size: 32px; margin: 8px 0 0; }
+.config-toolbar { display: flex; align-items: end; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+.config-toolbar label { margin: 0; min-width: 150px; }
+.config-grid { display: grid; grid-template-columns: minmax(320px, .8fr) minmax(420px, 1.2fr); gap: 28px; align-items: start; }
+.physical-grid { margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--line); }
+.field-row { display: grid; grid-template-columns: 90px 1fr 110px; gap: 12px; }
+.field-row label { min-width: 0; }
+.check-label { grid-template-columns: auto 1fr; align-items: center; }
+.check-label input { width: 18px; height: 18px; }
+.challenge-list h3, .form-panel > h3 { margin-top: 0; }
+.compact-card, .physical-card { padding: 18px; margin-bottom: 12px; }
+.compact-card { display: grid; grid-template-columns: 1fr auto; gap: 18px; }
+.compact-card h4, .physical-card h4 { font-size: 18px; margin: 7px 0; }
+.compact-card p, .physical-card p { color: var(--muted); margin: 4px 0 10px; }
+.icon-actions { display: flex; gap: 6px; align-items: start; }
+.icon-actions button { background: transparent; color: var(--ink); border: 1px solid var(--line); padding: 8px; cursor: pointer; }
+.icon-actions button:disabled { opacity: .35; cursor: default; }
+.physical-card { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 18px; }
+.physical-card svg { background: white; padding: 5px; }
 .center-state { display: grid; place-content: center; text-align: center; min-height: 100vh; }
 .center-state h1 { font-size: 48px; }
 .signal { color: var(--danger); font-size: 64px; }
@@ -183,14 +217,19 @@ textarea { min-height: 84px; resize: vertical; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 @media (max-width: 800px) {
-  .admin-grid { grid-template-columns: 1fr; }
+  .admin-grid, .config-grid { grid-template-columns: 1fr; }
   .page-header { align-items: flex-start; flex-direction: column; }
   .experience-card { grid-template-columns: 1fr; }
   .qr-box { width: fit-content; }
+  .config-header { align-items: flex-start; flex-direction: column; }
+  .config-toolbar { justify-content: flex-start; width: 100%; }
 }
 @media (max-width: 520px) {
   .code-form { flex-direction: column; }
   .mission-meta { flex-direction: column; gap: 8px; }
   .form-actions, .card-actions { flex-wrap: wrap; }
+  .field-row { grid-template-columns: 1fr; }
+  .physical-card { grid-template-columns: auto 1fr; }
+  .physical-card .ghost-button { grid-column: 1 / -1; }
 }
 
