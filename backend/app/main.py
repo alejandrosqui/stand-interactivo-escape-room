@@ -46,6 +46,11 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
+    allow_origins=[
+        origin.strip()
+        for origin in os.getenv("CORS_ORIGINS", "").split(",")
+        if origin.strip()
+    ],
     allow_origin_regex=os.getenv(
         "CORS_ORIGIN_REGEX",
         r"^http://(?:localhost|127\.0\.0\.1):\d+$",

@@ -31,12 +31,16 @@ El administrador podrá configurar la experiencia, los desafíos, las respuestas
 - [Reglas de trabajo con GitHub](docs/TRAZABILIDAD-GITHUB.md)
 - [Plan de pruebas](docs/PLAN-DE-PRUEBAS.md)
 - [ADR-001: arquitectura inicial](docs/ADR-001-ARQUITECTURA-INICIAL.md)
+- [Despliegue de producción en Ubuntu 24.04](docs/DESPLIEGUE-PRODUCCION.md)
 
 ## Estado actual
 
 Sprint 2 implementa el ciclo completo del juego sobre el corte vertical del Sprint 1.
 El administrador configura desafíos y elementos físicos; el participante inicia una
 partida, resuelve la secuencia con pistas y tiempo límite y recibe su resultado.
+
+> ESC03 (escaneo con cámara) permanece pendiente. Los códigos QR se ingresan
+> manualmente en esta versión y no deben presentarse como escaneo implementado.
 
 ## Sprint 2
 

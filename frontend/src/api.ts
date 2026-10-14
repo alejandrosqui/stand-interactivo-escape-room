@@ -9,8 +9,7 @@ import type {
   Partida,
 } from "./types";
 
-const API_HOST = window.location.hostname === "127.0.0.1" ? "127.0.0.1" : "localhost";
-const API_URL = (import.meta.env.VITE_API_URL ?? `http://${API_HOST}:8000/api`).replace(/\/$/, "");
+const API_URL = (import.meta.env.VITE_API_URL ?? "/api").replace(/\/$/, "");
 
 async function procesar<T>(respuesta: Response): Promise<T> {
   if (!respuesta.ok) {
